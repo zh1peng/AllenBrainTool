@@ -74,4 +74,5 @@ sns_plot2 = sns.jointplot(labels[0], labels[1], data_table.iloc[:,
 ```
 
 #### 
+sns_plot.savefig(name+'results.tiff',dpi=600)
 
