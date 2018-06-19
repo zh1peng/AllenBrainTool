@@ -211,13 +211,12 @@ def boostrap_nii_vs_gene_list(stat_map, well_ids, gene_expression_table, boot_n=
     if boot_n > 0:
         all_r_values = []
 # bootstrap resampling is done on whole table, spearman is then performed on each
-# column against 1st column. It is the easiest way but not 100% percent sure if there
-# is any bias in this method.
+# column against 1st column.
         for boot_n in range(boot_n):
             print('bootstraping for %s: %d' % (stat_name, boot_n))
             h = tmp_table.shape[0]
-            idx = np.random.choice(h, h)
-            resampled_table = tmp_table.iloc[idx, :]
+            idx = np.random.choice(h, h) # Here it should use permutation! Need to change----need to fix
+            resampled_table = tmp_table.iloc[idx, :] # only shuffle the 1: columns----need to fix
             tmp_r = spearman_corrwith(resampled_table)
             all_r_values.append(tmp_r)
         return all_r_values, tmp_table
