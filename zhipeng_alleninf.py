@@ -177,7 +177,7 @@ def random_gene(sample_n, exclude_genes, gene_list_csv=r'C:\Users\Zhipeng\Deskto
     # frame.to_csv(csvfile,index=0)
     gene_name = list(frame['Gene_name'])
     clean_gene_name = [n for n in gene_name if n not in exclude_genes]
-    random_gene = [str(n) for n in list(np.random.choice(clean_gene_name, sample_n))]
+    random_gene = [str(n) for n in list(np.random.choice(clean_gene_name, sample_n, replace=False))]
     return random_gene
 
 # get nii files
@@ -210,13 +210,14 @@ def boostrap_nii_vs_gene_list(stat_map, well_ids, gene_expression_table, boot_n=
 # bootstrap the table
     if boot_n > 0:
         all_r_values = []
-# bootstrap resampling is done on whole table, spearman is then performed on each
-# column against 1st column.
+# bootstrap resampling is done on whole table,[new version changed to 1:end] 
+# spearman is then performed on each column against 1st column.
         for boot_n in range(boot_n):
             print('bootstraping for %s: %d' % (stat_name, boot_n))
             h = tmp_table.shape[0]
-            idx = np.random.choice(h, h) # Here it should use permutation! Need to change----need to fix
-            resampled_table = tmp_table.iloc[idx, :] # only shuffle the 1: columns----need to fix
+            idx = np.random.choice(h, h, replace=False) # equivalent to np.random.permutation(np.arange(h))
+            resampled_table1 = tmp_table.iloc[idx, 1:] # only shuffle the 1:end columns
+            resampled_table=pd.concat([tmp_table.iloc[:,0],resampled_table1], axis=1)
             tmp_r = spearman_corrwith(resampled_table)
             all_r_values.append(tmp_r)
         return all_r_values, tmp_table
