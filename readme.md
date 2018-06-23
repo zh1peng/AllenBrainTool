@@ -76,3 +76,60 @@ sns_plot2 = sns.jointplot(labels[0], labels[1], data_table.iloc[:,
 #### 
 sns_plot.savefig(name+'results.tiff',dpi=600)
 
+
+
+
+
+
+
+
+
+code snips on how to use
+```python
+import pandas as pd
+import os
+from zhipeng_alleninf import *
+
+all_file, file_names = find_nii(
+    r'C:\Users\Zhipeng\Desktop\nii test')
+
+gene_list = random_gene(4, 'CNR1')
+all_gene_expression, well_ids1 = get_expression_values_from_gene_list(gene_list)
+
+all_gene_expression=pd.concat([all_gene_expression,all_gene_expression1],axis=1)
+
+stat_map = all_file[0]
+test, data_table = boostrap_nii_vs_gene_list(stat_map, well_ids, all_gene_expression, boot_n=5000)
+
+#all_r=np.array(test)
+np.savetxt('random_gene_r_values.csv', all_r,delimiter=',')
+data_table.to_csv('random_gene_expression_values.csv')
+all_r=np.array(test).reshape(-1,1)
+thres_95=np.percentile(all_r,95)
+np.percentile(all_r,10)
+
+
+
+
+gene_list=['CNR1']
+all_gene_expression_CNR1, well_ids = get_expression_values_from_gene_list(gene_list)
+
+stat_map = all_file[0] #select the 1st stat map
+
+data_table_cor = boostrap_nii_vs_gene_list(stat_map, well_ids, all_gene_expression_CNR1, boot_n=0)
+#if boot_strap set to 0, only return data_table
+
+# how to plot
+import pylab as plt
+import seaborn as sns
+from scipy.stats.stats import pearsonr, spearmanr
+labels = list(data_table_cor.keys())
+sns_plot1 = sns.jointplot(labels[0], labels[1], data_table_cor.iloc[:, [0, 1]], kind="reg")
+markers=['x','p']
+sns_plot2 = sns.jointplot(labels[0], labels[1], data_table_cor.iloc[:,[0, 1]], 
+                          stat_func=spearmanr, kind="reg",joint_kws={'marker':markers})
+sns_plot2.savefig(r'C:\Users\Zhipeng\Desktop\nii test\AllenBrainTool-master\results.png',dpi=600)
+data_table_cor.to_csv('CNR1_expression_values.csv')
+```
+
+
