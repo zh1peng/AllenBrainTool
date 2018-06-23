@@ -125,7 +125,7 @@ import seaborn as sns
 from scipy.stats.stats import pearsonr, spearmanr
 labels = list(data_table_cor.keys())
 sns_plot1 = sns.jointplot(labels[0], labels[1], data_table_cor.iloc[:, [0, 1]], kind="reg")
-markers=['x','p']
+markers='x'
 sns_plot2 = sns.jointplot(labels[0], labels[1], data_table_cor.iloc[:,[0, 1]], 
                           stat_func=spearmanr, kind="reg",joint_kws={'marker':markers})
 sns_plot2.savefig(r'C:\Users\Zhipeng\Desktop\nii test\AllenBrainTool-master\results.png',dpi=600)
