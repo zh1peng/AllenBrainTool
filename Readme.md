@@ -1,4 +1,3 @@
-### Caution!
 ### From reading this [A practical guide to linking brain-wide gene expression and neuroimaging data](https://www.biorxiv.org/content/early/2018/07/30/380089) paper,there are so many things need to be taken into account, so direct comparision between gene expression agains statastical maps may be not appraporiate! Use with big caution.
 
 ### Allen Brain Atlas tool
